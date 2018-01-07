@@ -30,7 +30,12 @@ List of supported currencies: AUD, BRL, CAD, CHF, CLP, CNY, CZK, DKK, EUR, GBP, 
 *Open Source*
 
 The source code is available at [github.com/lorien/ufoprice_bot](https://github.com/lorien/ufoprice_bot)
-You can contact author of the bot at @madspectator
+You can contact author via telegram @madspectator
+
+*Donations are welcome*
+
+UFO: CAdfaUR3tqfumoN7vQMVZ98CakyywgwK1L
+Ethereum: 0x00D0c93B180452a7c7B70F463aD9D24d9C6d4d61
 """
 #COINEXCHANGE_UFO_ID = 209
 #COINEXCHANGE_UFO_ASSET_ID = 177

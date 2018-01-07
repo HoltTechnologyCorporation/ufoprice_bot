@@ -49,6 +49,7 @@ CAP_CURRENCY_LIST = (
 CACHE = {}
 CACHE_TIMEOUT = 60
 NET_RETRIES = 5
+FIAT_DECIMALS = 5
 
 
 def load_json(url):
@@ -69,7 +70,7 @@ def load_btc_usd_price():
 #    try:
 #        data = g.doc.json
 #    except Exception:
-#        print('invalid data', g.doc.unicode_body())
+#        logging.error('invalid data', g.doc.unicode_body())
 #        raise
 #    return data
 #
@@ -141,11 +142,11 @@ def format_price_msg(fee=0, extra_currency=None):
     line = [
         "Price: " +
         "%s BTC" % format_float(ufo_btc, None),
-        "%s USD" % format_float(ufo_usd, 4),
+        "%s USD" % format_float(ufo_usd, FIAT_DECIMALS),
     ]
     if extra_currency:
         line.append(
-            "%s %s" % (format_float(ufo_cur, 3), extra_currency.upper())
+            "%s %s" % (format_float(ufo_cur, FIAT_DECIMALS), extra_currency.upper())
         )
     lines = [line]
     if fee:
@@ -153,12 +154,12 @@ def format_price_msg(fee=0, extra_currency=None):
         line = [
             ('With fee %s%d%%: ' % (sign, fee)) +
             "%s BTC" % format_float(ufo_btc, round_digits=None, fee=fee),
-            "%s USD" % format_float(ufo_usd, round_digits=4, fee=fee),
+            "%s USD" % format_float(ufo_usd, round_digits=FIAT_DECIMALS, fee=fee),
         ]
         if extra_currency:
             line.append(
                 "%s %s" % (
-                    format_float(ufo_cur, round_digits=3, fee=fee),
+                    format_float(ufo_cur, round_digits=FIAT_DECIMALS, fee=fee),
                     extra_currency.upper()
                 )
             )
@@ -174,7 +175,7 @@ def format_stat_msg():
     line2 = [
         "Price: " +
         "%s BTC" % format_float(float(data['price_btc']), None),
-        "%s USD" % format_float(float(data['price_usd']), 4),
+        "%s USD" % format_float(float(data['price_usd']), FIAT_DECIMALS),
     ]
     line3 = [
         "Volume 24h: %s USD" % format_float(float(data['24h_volume_usd']), 0),

@@ -17,19 +17,12 @@ This simple telegram bot displays price of UFO coin in BTC, USD and rubles.
 
 /help - display this help message
 /price - display UFO coin price information
+/price <int>% - display UFO coinf price info and also price affected by fee. Fee could be negative. Example: `/price 2%`
 
 *Open Source*
 
 The source code is available at [github.com/lorien/ufoprice_bot](https://github.com/lorien/ufoprice_bot)
 You can contact author of the bot at @madspectator
-"""
-
-"""
-) курс биткоина на bittrex - https://bittrex.com/Market/Index?MarketName=USDT-BTC
-2) курс ПРОДАЖИ ufo на коинэкчендж - https://www.coinexchange.io/market/UFO/BTC столбик SELL
-3) курс рубля (сейчас считаю по 58р)
-4) моя комиссия 10%
-Вот эти 4 цифры перемножаем - получаем текущую цену
 """
 #COINEXCHANGE_UFO_ID = 209
 #COINEXCHANGE_UFO_ASSET_ID = 177

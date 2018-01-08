@@ -21,9 +21,10 @@ This simple telegram bot displays price of UFO coin in BTC, USD and other fiat c
 
 /help - display this help message
 /ufoprice - display price
-/ufoprice <int>% - display price and also price affected by fee. Fee could be negative. Example: `/price 2%`
-/ufoprice <currency> - display price in USD and also in specified currency. You can combine currency and fee arguments e.g. `/ufoprice rub 3%`.
-/ufostat - display current price, day volume and price changes
+/ufoprice <currency> - display price in USD and also in specified currency.
+/ufoprice <int>% - display price and also price increased/decreased by fee. Fee could be negative. Example: `/price 2%`
+
+You can combine currency and fee arguments e.g. `/ufoprice rub 3%`.
 
 List of supported currencies: AUD, BRL, CAD, CHF, CLP, CNY, CZK, DKK, EUR, GBP, HKD, HUF, IDR, ILS, INR, JPY, KRW, MXN, MYR, NOK, NZD, PHP, PKR, PLN, RUB, SEK, SGD, THB, TRY, TWD, ZAR.
 
@@ -37,8 +38,6 @@ You can contact author via telegram @madspectator
 UFO: CAdfaUR3tqfumoN7vQMVZ98CakyywgwK1L
 Ethereum: 0x00D0c93B180452a7c7B70F463aD9D24d9C6d4d61
 """
-#COINEXCHANGE_UFO_ID = 209
-#COINEXCHANGE_UFO_ASSET_ID = 177
 NET_TIMEOUT = 3
 CAP_CURRENCY_LIST = (
     "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK",
@@ -62,22 +61,6 @@ def load_btc_usd_price():
     data = load_json(url)
     return float(data['last_price'])
 
-
-#def load_ufo_coinexchange_data():
-#    url = 'https://176.9.8.28/api/v1/getmarketsummary?market_id=209'
-#    g = Grab(timeout=NET_TIMEOUT, headers={'Host': 'www.coinexchange.io'})
-#    g.go(url)
-#    try:
-#        data = g.doc.json
-#    except Exception:
-#        logging.error('invalid data', g.doc.unicode_body())
-#        raise
-#    return data
-#
-#
-#def load_ufo_btc_price():
-#    data = load_ufo_coinexchange_data()
-#    return float(data['result']['AskPrice'])
 
 def load_ufo_cap_data(currency=None):
     url = 'https://api.coinmarketcap.com/v1/ticker/ufo-coin/'
@@ -105,14 +88,6 @@ def load_ufo_cap_data(currency=None):
                 data = data[0]
                 CACHE[url] = (time.time(), data)
     return data
-
-
-#def load_usd_rub_price():
-#    url = 'http://www.cbr.ru/scripts/XML_daily_eng.asp'
-#    g = Grab(timeout=NET_TIMEOUT)
-#    g.go(url)
-#    val = g.doc('//valute[@id="R01235"]/value/text()').text()
-#    return float(val.replace(',', '.'))
 
 
 def format_float(val, round_digits=None, fee=0):
@@ -164,19 +139,6 @@ def format_price_msg(fee=0, extra_currency=None):
                 )
             )
         lines.append(line)
-    return '\n'.join([', '.join(x) for x in lines])
-
-
-def format_stat_msg():
-    data = load_ufo_cap_data()
-    line1 = [
-        "CoinMarketCap: #%d" % int(data['rank'])
-    ]
-    line2 = [
-        "Price: " +
-        "%s BTC" % format_float(float(data['price_btc']), None),
-        "%s USD" % format_float(float(data['price_usd']), FIAT_DECIMALS),
-    ]
     line3 = [
         "Volume 24h: %s USD" % format_float(float(data['24h_volume_usd']), 0),
     ]
@@ -186,7 +148,8 @@ def format_stat_msg():
         "24h (%s%%)" % format_float(float(data['percent_change_24h']), 2),
         "7d (%s%%)" % format_float(float(data['percent_change_7d']), 2),
     ]
-    lines = [line1, line2, line3, line4]
+    lines.extend([line3, line4])
+
     return '\n'.join([', '.join(x) for x in lines])
 
 
@@ -234,16 +197,6 @@ def create_bot(api_token):
                 ret = 'Internal Bot Error: %s' % str(ex)
                 bot.reply_to(msg, ret)
                 raise
-
-    @bot.message_handler(commands=['ufostat'])
-    def handle_stat(msg):
-        try:
-            ret = format_stat_msg()
-            bot.reply_to(msg, ret)
-        except Exception as ex:
-            ret = 'Internal Bot Error: %s' % str(ex)
-            bot.reply_to(msg, ret)
-            raise
 
     return bot
 

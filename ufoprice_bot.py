@@ -201,18 +201,23 @@ def create_bot(api_token):
     return bot
 
 
+def init_bot_with_mode(mode):
+    with open('var/config.json') as inp:
+        config = json.load(inp)
+    if mode == 'test':
+        token = config['test_api_token']
+    else:
+        token = config['api_token']
+    bot = create_bot(token)
+    return bot
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument('--mode')
     opts = parser.parse_args()
     logging.basicConfig(level=logging.DEBUG)
-    with open('var/config.json') as inp:
-        config = json.load(inp)
-    if opts.mode == 'test':
-        token = config['test_api_token']
-    else:
-        token = config['api_token']
-    bot = create_bot(token)
+    bot = init_bot_with_mode(opts.mode)
     bot.polling()
 
 

@@ -158,7 +158,7 @@ def create_bot(api_token):
 
     @bot.message_handler(commands=['start', 'help'])
     def handle_start_help(msg):
-        bot.reply_to(msg, HELP, parse_mode='Markdown')
+        bot.send_message(msg.chat.id, HELP, parse_mode='Markdown')
 
     @bot.message_handler(commands=['ufoprice'])
     def handle_price(msg):
@@ -188,14 +188,14 @@ def create_bot(api_token):
         if parts:
             fail = True
         if fail:
-            bot.reply_to(msg, 'Invalid command. See /help')
+            bot.send_message(msg.chat.id, 'Invalid command. See /help')
         else:
             try:
                 ret = format_price_msg(fee=fee, extra_currency=extra_currency)
-                bot.reply_to(msg, ret)
+                bot.send_message(msg.chat.id, ret)
             except Exception as ex:
                 ret = 'Internal Bot Error: %s' % str(ex)
-                bot.reply_to(msg, ret)
+                bot.send_message(msg.chat.id, ret)
                 raise
 
     return bot

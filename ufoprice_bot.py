@@ -102,6 +102,10 @@ def load_ufo_cap_data(currency=None):
 
 
 def format_float(val, round_digits=None, fee=0):
+    if val is None:
+        return 'NA'
+    else:
+        val = float(val)
     if fee:
         val = (val * (100 + fee)) / 100
     if round_digits is not None:
@@ -155,9 +159,9 @@ def format_price_msg(fee=0, extra_currency=None):
     ]
     line4 = [
         "Price change: " +
-        "1h (%s%%)" % format_float(float(data['percent_change_1h']), 2),
-        "24h (%s%%)" % format_float(float(data['percent_change_24h']), 2),
-        "7d (%s%%)" % format_float(float(data['percent_change_7d']), 2),
+        "1h (%s%%)" % format_float(data['percent_change_1h'], 2),
+        "24h (%s%%)" % format_float(data['percent_change_24h'], 2),
+        "7d (%s%%)" % format_float(data['percent_change_7d'], 2),
     ]
     lines.extend([line3, line4])
 

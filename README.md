@@ -4,7 +4,8 @@ This simple telegram bot displays price of UFO coin in BTC, USD and RUB.
 
 ## Support
 
-* Email: lorien@lorien.name
+* Telegram chat (English): https://t.me/tgdev_en
+* Telegram chat (Russian): https://t.me/tgdev_ru
 * Use github issues to report bugs: [github issues](https://github.com/lorien/ufoprice_bot/issues)
 
 ## My Other Projects
